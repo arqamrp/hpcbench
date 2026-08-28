@@ -17,14 +17,14 @@ function resample!(particle; global_comm, seed = 123)
   last_child = ceil(Int, n_children*high - u)
 
   # send and receive particles
-  MPI.Irec!(new_particle, global_comm; source = MPI.ANY_SOURCE)
+  new_particle_state = Array{Float64}(undef, size(particle.state))
+  rreq = MPI.Irecv!(new_particle_state, global_comm; source = MPI.ANY_SOURCE)
   for child in first_child:last_child
-      sreq = MPI.Isend(particle, global_comm; dest = child)
+      sreq = MPI.Isend(particle.state, global_comm; dest = child)
   end
-  
-  #reset weights
-  new_particle.logWeight = 0.0
-  particle = new_particle
+
+  stats = MPI.Waitall([rreq, sreq])
+  particle = Particle(new_particle_state, 0.0)
   
   return nothing
 end
