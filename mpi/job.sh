@@ -8,7 +8,6 @@
 #SBATCH --output=logs/%x-%j.out
 #SBATCH --error=logs/%x-%j.err
 #SBATCH --account=CHANGEME        # EDIT
-#SBATCH --partition=CHANGEME      # EDIT
 
 set -euo pipefail
 

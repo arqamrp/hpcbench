@@ -1,0 +1,17 @@
+# Machine-specific MPI binding (written by MPIPreferences.use_system_binary()).
+# Points at one machine's libmpi; committing it breaks every other machine.
+LocalPreferences.toml
+
+# Slurm job output and benchmark results
+logs/
+results/
+slurm-*.out
+
+# Julia
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+/docs/build/
+
+# macOS
+.DS_Store
