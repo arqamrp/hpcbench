@@ -1,29 +1,27 @@
 #!/bin/bash
+# Account comes from SBATCH_ACCOUNT; export it in ~/.bashrc on the cluster.
 #SBATCH --job-name=hpcbench
 #SBATCH --time=00:15:00
-#SBATCH --nodes=1                  # all 64 ranks on one node: intra-node only
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=64
 #SBATCH --cpus-per-task=1
-#SBATCH --mem-per-cpu=1G           # ~370M measured per rank; the particle itself is 8K
+#SBATCH --mem-per-cpu=1500M 
 #SBATCH --output=logs/%x-%j.out
 #SBATCH --error=logs/%x-%j.err
-#SBATCH --account=CHANGEME        # EDIT
 
 set -euo pipefail
 
-# No `module purge`: StdEnv/2023 and gentoo/2023 are sticky and survive it, but
-# gcc/12.3 and openmpi/4.1.5 are not -- purging would drop the exact OpenMPI that
-# LocalPreferences.toml binds libmpi to, leaving a broken-but-plausible env.
+# No `module purge`: it would drop the openmpi that LocalPreferences.toml binds to,
+# while sticky StdEnv/gentoo survive, leaving a broken-but-plausible environment.
 module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
-module load julia/1.12.5           # EDIT: pick a version from `module spider julia`
+module load julia/1.12.5
 
 cd "$SLURM_SUBMIT_DIR"
 mkdir -p logs results
 
-export JULIA_NUM_THREADS=1         # one Julia thread per MPI rank
+export JULIA_NUM_THREADS=1
 
-# Precompile ONCE on a single process. Letting 64 ranks race on the
-# precompile cache at startup corrupts it.
+# Precompile once
 julia --project=. -e 'using Pkg; Pkg.instantiate(); using MPI'
 
 NREPS=100
@@ -31,7 +29,6 @@ SEED=123
 RESULTS="results/bench-${SLURM_JOB_ID}.csv"
 echo "cores,dim,wt,min_s,median_s,p90_s" > "$RESULTS"
 
-# factors from readme.md
 # wt -- 1: middle rank dies out, 2: even ranks die out, 3: all except last die out
 for cores in 4 8 16 32 64; do
   for dim in 10 100 1000; do
