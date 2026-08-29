@@ -30,7 +30,7 @@ echo "cores,dim,wt,min_s,median_s,p90_s" > "$RESULTS"
 
 # factors from readme.md
 # wt -- 1: middle rank dies out, 2: even ranks die out, 3: all except last die out
-for cores in 4 16 64; do
+for cores in 4 8 16 32 64; do
   for dim in 10 100 1000; do
     for wt in 1 2 3; do
       echo "=== cores=$cores dim=$dim wt=$wt ===" >&2
