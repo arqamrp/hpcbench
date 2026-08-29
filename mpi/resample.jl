@@ -40,7 +40,7 @@ function MPI_resample!(particle; global_comm, seed = 123)
   for child in first_child:last_child
     if child != rank
       push!(reqs, MPI.Isend(particle.state, global_comm; dest = child))    
-      println("Rank $rank sending particle to rank $child") # dont print while measuring time
+      # println("Rank $rank sending particle to rank $child") # dont print while measuring time
     end
   end
 
