@@ -11,8 +11,11 @@
 
 set -euo pipefail
 
-module purge
-module load julia                  # EDIT to match your cluster
+# No `module purge`: StdEnv/2023 and gentoo/2023 are sticky and survive it, but
+# gcc/12.3 and openmpi/4.1.5 are not -- purging would drop the exact OpenMPI that
+# LocalPreferences.toml binds libmpi to, leaving a broken-but-plausible env.
+module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
+module load julia/1.12.5           # EDIT: pick a version from `module spider julia`
 
 cd "$SLURM_SUBMIT_DIR"
 mkdir -p logs results
