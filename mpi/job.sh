@@ -24,6 +24,11 @@ export JULIA_NUM_THREADS=1
 # Precompile once
 julia --project=. -e 'using Pkg; Pkg.instantiate(); using MPI'
 
+# Fail fast if LocalPreferences.toml is missing: the bundled MPICH_jll cannot talk
+# PMIx and every srun below would abort.
+julia --project=. -e 'using MPI; MPI.MPI_LIBRARY == "OpenMPI" ||
+  error("expected system OpenMPI, got $(MPI.MPI_LIBRARY) $(MPI.MPI_LIBRARY_VERSION)")'
+
 NREPS=100
 SEED=123
 RESULTS="results/bench-${SLURM_JOB_ID}.csv"
