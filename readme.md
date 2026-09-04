@@ -1,3 +1,10 @@
+We compare:
+* MPI.jl
+* DistributedArrays.jl [SPMD mode](https://juliaparallel.org/DistributedArrays.jl/stable/#SPMD-Mode-(An-MPI-Style-SPMD-mode-with-MPI-like-primitives,-requires-Julia-0.6))
+
+
+
+
 
 ## Factors to test
 
