@@ -1,12 +1,14 @@
 We compare:
-* MPI.jl
+* [MPI.jl](https://juliaparallel.org/MPI.jl/stable/)
 * DistributedArrays.jl [SPMD mode](https://juliaparallel.org/DistributedArrays.jl/stable/#SPMD-Mode-(An-MPI-Style-SPMD-mode-with-MPI-like-primitives,-requires-Julia-0.6))
 
+## Collective operations
+NOTE: Scan and reduce aren't implemented in the latter yet.
+* scatter 
+* gather
+* bcast
 
-
-
-
-## Factors to test
+## Resampling test
 
 * Dimension of particle: 10, 100, 1000
 * Number of cores: 4, 8, 16, 32, 64
