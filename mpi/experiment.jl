@@ -18,6 +18,7 @@ dim   = length(ARGS) >= 1 ? parse(Int, ARGS[1]) : 10
 seed  = length(ARGS) >= 2 ? parse(Int, ARGS[2]) : 123
 wt    = length(ARGS) >= 3 ? parse(Int, ARGS[3]) : 1  # 1: middle dies out, 2: even die out, 3: all except last die out
 nreps = length(ARGS) >= 4 ? parse(Int, ARGS[4]) : 100
+verbose = length(ARGS) >= 5 ? parse(Int, ARGS[5]) : 0
 
 function init_logWt(wt, rank, cores)
   if wt == 1
@@ -45,7 +46,7 @@ for r in 1:nreps
   
   MPI.Barrier(comm)
   t0 = MPI.Wtime()
-  MPI_resample!(local_particle; global_comm = comm, seed = seed + r)
+  MPI_resample!(local_particle; global_comm = comm, seed = seed + r, verbose = verbose)
   times[r] = MPI.Wtime() - t0
 
 end

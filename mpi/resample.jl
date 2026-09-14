@@ -1,5 +1,5 @@
 using Random
-function MPI_resample!(particle; global_comm, seed = 123)    
+function MPI_resample!(particle; global_comm, seed = 123, verbose = 0)    
   n_children = MPI.Comm_size(global_comm)
   rank = MPI.Comm_rank(global_comm)
   
@@ -40,7 +40,9 @@ function MPI_resample!(particle; global_comm, seed = 123)
   for child in first_child:last_child
     if child != rank
       push!(reqs, MPI.Isend(particle.state, global_comm; dest = child))    
-      # println("Rank $rank sending particle to rank $child") # dont print while measuring time
+      if verbose > 0
+        println("Rank $rank sending particle to rank $child") # dont print while measuring time
+      end
     end
   end
 
