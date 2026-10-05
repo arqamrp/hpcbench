@@ -35,14 +35,15 @@ RESULTS="results/bench-${SLURM_JOB_ID}.csv"
 echo "cores,dim,wt,min_s,median_s,p90_s" > "$RESULTS"
 
 # wt -- 1: middle rank dies out, 2: even ranks die out, 3: all except last die out
-for cores in 4 8 16 32 64; do
-  for dim in 10 100 1000; do
-    for wt in 1 2 3; do
-      echo "=== cores=$cores dim=$dim wt=$wt ===" >&2
-      srun --nodes=1 --ntasks="$cores" --cpus-per-task=1 \
-        julia --project=. mpi/experiment.jl "$dim" "$SEED" "$wt" "$NREPS" >> "$RESULTS"
-    done
+
+cores = 64
+for dim in 10 100 1000 10000; do
+  for wt in 1 2 3; do
+    echo "=== cores=$cores dim=$dim wt=$wt ===" >&2
+    srun --nodes=1 --ntasks="$cores" --cpus-per-task=1 \
+      julia --project=. mpi/experiment.jl "$dim" "$SEED" "$wt" "$NREPS" >> "$RESULTS"
   done
 done
+
 
 echo "wrote $RESULTS"
