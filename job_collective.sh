@@ -40,7 +40,7 @@ SPMD_RESULTS="results/bench-collective-spmd-${SLURM_JOB_ID}.csv"
 echo "cores,dim,op,min_s,median_s,p90_s" > "$MPI_RESULTS"
 echo "cores,dim,op,min_s,median_s,p90_s" > "$SPMD_RESULTS"
 
-cores = 32
+cores=32
 for dim in 1 10 100 200 300 500 1000; do
   echo "=== mpi cores=$cores dim=$dim ===" >&2
   srun --ntasks="$cores" --ntasks-per-node=32  --cpus-per-task=1 \
@@ -53,7 +53,7 @@ for dim in 1 10 100 200 300 500 1000; do
     julia --project=. spmd/collective_ops.jl "$OP" "$dim" "$NREPS" 0 "$cores" >> "$SPMD_RESULTS"
 done
 
-dim = 1000
+dim=1000
 
 for cores in 4 8 16 32 64 128; do
     echo "=== mpi cores=$cores dim=$dim ===" >&2
@@ -65,7 +65,6 @@ for cores in 4 8 16 32 64 128; do
     echo "=== spmd cores=$cores dim=$dim ===" >&2
     srun --nodes=1 --ntasks=1 --cpus-per-task="$cores" \
       julia --project=. spmd/collective_ops.jl "$OP" "$dim" "$NREPS" 0 "$cores" >> "$SPMD_RESULTS"
-  done
 done
 
 
