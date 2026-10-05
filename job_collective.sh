@@ -41,7 +41,7 @@ echo "cores,dim,op,min_s,median_s,p90_s" > "$MPI_RESULTS"
 echo "cores,dim,op,min_s,median_s,p90_s" > "$SPMD_RESULTS"
 
 cores=32
-for dim in 1 10 100 200 300 500 1000; do
+for dim in 1 10000 20000 30000 50000 100000; do
   echo "=== mpi cores=$cores dim=$dim ===" >&2
   srun --ntasks="$cores" --ntasks-per-node=32  --cpus-per-task=1 \
     julia --project=. mpi/collective_ops.jl "$OP" "$dim" "$NREPS" 0 >> "$MPI_RESULTS"
@@ -53,7 +53,7 @@ for dim in 1 10 100 200 300 500 1000; do
     julia --project=. spmd/collective_ops.jl "$OP" "$dim" "$NREPS" 0 "$cores" >> "$SPMD_RESULTS"
 done
 
-dim=1000
+dim=10000
 
 for cores in 4 8 16 32 64 128; do
     echo "=== mpi cores=$cores dim=$dim ===" >&2
