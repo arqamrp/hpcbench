@@ -34,7 +34,7 @@ julia --project=. -e 'using MPI; MPI.MPI_LIBRARY == "OpenMPI" ||
   error("expected system OpenMPI, got $(MPI.MPI_LIBRARY) $(MPI.MPI_LIBRARY_VERSION)")'
 
 OP=1
-NREPS=200
+NREPS=400
 MPI_RESULTS="results/bench-collective-mpi-${SLURM_JOB_ID}.csv"
 SPMD_RESULTS="results/bench-collective-spmd-${SLURM_JOB_ID}.csv"
 echo "cores,dim,op,min_s,median_s,p90_s" > "$MPI_RESULTS"
