@@ -6,8 +6,8 @@
 # mpi/collective_ops.jl or spmd/collective_ops.jl yet.
 #SBATCH --job-name=hpcbench-collective
 #SBATCH --time=00:30:00
-#SBATCH --nodes=8
-#SBATCH --ntasks-per-node=32
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=128
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=1500M
 #SBATCH --output=logs/%x-%j.out
